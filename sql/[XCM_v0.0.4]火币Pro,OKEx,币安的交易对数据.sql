@@ -16,6 +16,24 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `xcm_binance_symbol`
+--
+
+DROP TABLE IF EXISTS `xcm_binance_symbol`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `xcm_binance_symbol` (
+  `_id` int(11) NOT NULL AUTO_INCREMENT,
+  `symbol` varchar(20) DEFAULT NULL COMMENT '交易对',
+  `base_asset` varchar(20) DEFAULT NULL COMMENT '交易币种',
+  `base_asset_precision` int(2) DEFAULT NULL COMMENT '交易货币精度',
+  `quote_asset` varchar(20) DEFAULT NULL COMMENT '计价币种',
+  `quote_asset_precision` int(2) DEFAULT NULL COMMENT '计价货币精度',
+  PRIMARY KEY (`_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=385 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `xcm_binance_symbol`
 --
 
@@ -26,6 +44,25 @@ INSERT INTO `xcm_binance_symbol` VALUES (1,'ETHBTC','ETH',8,'BTC',8),(2,'LTCBTC'
 UNLOCK TABLES;
 
 --
+-- Table structure for table `xcm_huobi_symbol`
+--
+
+DROP TABLE IF EXISTS `xcm_huobi_symbol`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `xcm_huobi_symbol` (
+  `_id` int(11) NOT NULL AUTO_INCREMENT,
+  `base_currency` varchar(20) NOT NULL COMMENT '基础币种',
+  `quote_currency` varchar(20) NOT NULL COMMENT '计价币种',
+  `price_precision` tinyint(2) NOT NULL COMMENT '价格精度位数（0为个位）',
+  `amount_precision` tinyint(2) NOT NULL COMMENT '数量精度位数（0为个位）',
+  `symbol` varchar(40) NOT NULL COMMENT '交易对',
+  `symbol_partition` varchar(20) NOT NULL COMMENT '交易区。\nmain主区，innovation创新区，bifurcation分叉区。',
+  PRIMARY KEY (`_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=260 DEFAULT CHARSET=utf8 COMMENT='火币Pro交易对表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `xcm_huobi_symbol`
 --
 
@@ -34,6 +71,26 @@ LOCK TABLES `xcm_huobi_symbol` WRITE;
 INSERT INTO `xcm_huobi_symbol` VALUES (1,'btc','usdt',2,4,'btcusdt','main'),(2,'bch','usdt',2,4,'bchusdt','main'),(3,'eth','usdt',2,4,'ethusdt','main'),(4,'etc','usdt',4,4,'etcusdt','main'),(5,'ltc','usdt',2,4,'ltcusdt','main'),(6,'eos','usdt',4,4,'eosusdt','main'),(7,'xrp','usdt',4,2,'xrpusdt','main'),(8,'omg','usdt',4,4,'omgusdt','main'),(9,'dash','usdt',2,4,'dashusdt','main'),(10,'zec','usdt',2,4,'zecusdt','main'),(11,'ada','usdt',6,4,'adausdt','main'),(12,'steem','usdt',4,4,'steemusdt','main'),(13,'iota','usdt',4,4,'iotausdt','main'),(14,'ocn','usdt',8,4,'ocnusdt','innovation'),(15,'soc','usdt',4,2,'socusdt','innovation'),(16,'ctxc','usdt',4,4,'ctxcusdt','innovation'),(17,'act','usdt',4,2,'actusdt','innovation'),(18,'btm','usdt',4,2,'btmusdt','innovation'),(19,'bts','usdt',4,2,'btsusdt','innovation'),(20,'ont','usdt',4,4,'ontusdt','innovation'),(21,'iost','usdt',6,4,'iostusdt','innovation'),(22,'ht','usdt',4,2,'htusdt','innovation'),(23,'trx','usdt',6,2,'trxusdt','innovation'),(24,'dta','usdt',8,4,'dtausdt','innovation'),(25,'neo','usdt',2,4,'neousdt','innovation'),(26,'qtum','usdt',2,4,'qtumusdt','innovation'),(27,'smt','usdt',6,4,'smtusdt','innovation'),(28,'ela','usdt',4,2,'elausdt','innovation'),(29,'ven','usdt',4,4,'venusdt','innovation'),(30,'theta','usdt',4,4,'thetausdt','innovation'),(31,'snt','usdt',6,4,'sntusdt','innovation'),(32,'zil','usdt',6,4,'zilusdt','innovation'),(33,'xem','usdt',4,4,'xemusdt','innovation'),(34,'nas','usdt',4,4,'nasusdt','innovation'),(35,'ruff','usdt',6,4,'ruffusdt','innovation'),(36,'hsr','usdt',4,4,'hsrusdt','innovation'),(37,'let','usdt',6,4,'letusdt','innovation'),(38,'mds','usdt',6,2,'mdsusdt','innovation'),(39,'storj','usdt',4,4,'storjusdt','innovation'),(40,'elf','usdt',4,4,'elfusdt','innovation'),(41,'itc','usdt',4,4,'itcusdt','innovation'),(42,'cvc','usdt',4,2,'cvcusdt','innovation'),(43,'gnt','usdt',4,4,'gntusdt','innovation'),(44,'xmr','btc',6,4,'xmrbtc','main'),(45,'bch','btc',6,4,'bchbtc','main'),(46,'eth','btc',6,4,'ethbtc','main'),(47,'ltc','btc',6,4,'ltcbtc','main'),(48,'etc','btc',6,4,'etcbtc','main'),(49,'eos','btc',8,2,'eosbtc','main'),(50,'omg','btc',6,4,'omgbtc','main'),(51,'xrp','btc',8,0,'xrpbtc','main'),(52,'dash','btc',6,4,'dashbtc','main'),(53,'zec','btc',6,4,'zecbtc','main'),(54,'ada','btc',8,2,'adabtc','main'),(55,'steem','btc',8,2,'steembtc','main'),(56,'iota','btc',8,2,'iotabtc','main'),(57,'poly','btc',8,2,'polybtc','innovation'),(58,'kan','btc',10,2,'kanbtc','innovation'),(59,'lba','btc',8,2,'lbabtc','innovation'),(60,'wan','btc',8,2,'wanbtc','innovation'),(61,'bft','btc',8,2,'bftbtc','innovation'),(62,'btm','btc',8,2,'btmbtc','innovation'),(63,'ont','btc',8,4,'ontbtc','innovation'),(64,'iost','btc',10,2,'iostbtc','innovation'),(65,'ht','btc',8,2,'htbtc','innovation'),(66,'trx','btc',10,2,'trxbtc','innovation'),(67,'smt','btc',8,0,'smtbtc','innovation'),(68,'ela','btc',8,2,'elabtc','innovation'),(69,'wicc','btc',8,2,'wiccbtc','innovation'),(70,'ocn','btc',10,2,'ocnbtc','innovation'),(71,'zla','btc',8,2,'zlabtc','innovation'),(72,'abt','btc',8,2,'abtbtc','innovation'),(73,'mtx','btc',8,2,'mtxbtc','innovation'),(74,'nas','btc',8,4,'nasbtc','innovation'),(75,'ven','btc',8,2,'venbtc','innovation'),(76,'dta','btc',10,2,'dtabtc','innovation'),(77,'neo','btc',6,4,'neobtc','innovation'),(78,'wax','btc',8,4,'waxbtc','innovation'),(79,'bts','btc',8,2,'btsbtc','innovation'),(80,'zil','btc',10,2,'zilbtc','innovation'),(81,'theta','btc',8,2,'thetabtc','innovation'),(82,'ctxc','btc',8,2,'ctxcbtc','innovation'),(83,'srn','btc',8,2,'srnbtc','innovation'),(84,'xem','btc',8,2,'xembtc','innovation'),(85,'icx','btc',8,4,'icxbtc','innovation'),(86,'dgd','btc',6,4,'dgdbtc','innovation'),(87,'chat','btc',8,2,'chatbtc','innovation'),(88,'wpr','btc',8,2,'wprbtc','innovation'),(89,'lun','btc',6,4,'lunbtc','innovation'),(90,'swftc','btc',10,2,'swftcbtc','innovation'),(91,'snt','btc',8,0,'sntbtc','innovation'),(92,'meet','btc',10,2,'meetbtc','innovation'),(93,'yee','btc',10,2,'yeebtc','innovation'),(94,'elf','btc',8,0,'elfbtc','innovation'),(95,'let','btc',10,2,'letbtc','innovation'),(96,'qtum','btc',6,4,'qtumbtc','innovation'),(97,'lsk','btc',6,4,'lskbtc','innovation'),(98,'itc','btc',8,0,'itcbtc','innovation'),(99,'soc','btc',10,2,'socbtc','innovation'),(100,'qash','btc',8,4,'qashbtc','innovation'),(101,'mds','btc',8,0,'mdsbtc','innovation'),(102,'eko','btc',10,2,'ekobtc','innovation'),(103,'topc','btc',10,2,'topcbtc','innovation'),(104,'mtn','btc',8,2,'mtnbtc','innovation'),(105,'act','btc',8,2,'actbtc','innovation'),(106,'hsr','btc',8,4,'hsrbtc','innovation'),(107,'stk','btc',8,2,'stkbtc','innovation'),(108,'storj','btc',8,2,'storjbtc','innovation'),(109,'gnx','btc',8,0,'gnxbtc','innovation'),(110,'dbc','btc',10,2,'dbcbtc','innovation'),(111,'snc','btc',8,2,'sncbtc','innovation'),(112,'cmt','btc',8,2,'cmtbtc','innovation'),(113,'tnb','btc',10,0,'tnbbtc','innovation'),(114,'ruff','btc',10,2,'ruffbtc','innovation'),(115,'qun','btc',10,2,'qunbtc','innovation'),(116,'zrx','btc',8,2,'zrxbtc','innovation'),(117,'knc','btc',8,0,'kncbtc','innovation'),(118,'blz','btc',8,2,'blzbtc','innovation'),(119,'propy','btc',8,2,'propybtc','innovation'),(120,'rpx','btc',8,2,'rpxbtc','innovation'),(121,'appc','btc',8,2,'appcbtc','innovation'),(122,'aidoc','btc',10,2,'aidocbtc','innovation'),(123,'powr','btc',8,0,'powrbtc','innovation'),(124,'cvc','btc',8,0,'cvcbtc','innovation'),(125,'pay','btc',8,2,'paybtc','innovation'),(126,'qsp','btc',8,0,'qspbtc','innovation'),(127,'dat','btc',10,2,'datbtc','innovation'),(128,'rdn','btc',8,0,'rdnbtc','innovation'),(129,'mco','btc',6,4,'mcobtc','innovation'),(130,'rcn','btc',10,0,'rcnbtc','innovation'),(131,'mana','btc',8,0,'manabtc','innovation'),(132,'utk','btc',8,2,'utkbtc','innovation'),(133,'tnt','btc',10,0,'tntbtc','innovation'),(134,'gas','btc',6,4,'gasbtc','innovation'),(135,'bat','btc',8,0,'batbtc','innovation'),(136,'ost','btc',8,2,'ostbtc','innovation'),(137,'link','btc',8,2,'linkbtc','innovation'),(138,'gnt','btc',8,2,'gntbtc','innovation'),(139,'mtl','btc',8,4,'mtlbtc','innovation'),(140,'evx','btc',8,2,'evxbtc','innovation'),(141,'req','btc',8,1,'reqbtc','innovation'),(142,'adx','btc',8,2,'adxbtc','innovation'),(143,'ast','btc',8,0,'astbtc','innovation'),(144,'eng','btc',8,2,'engbtc','innovation'),(145,'salt','btc',8,4,'saltbtc','innovation'),(146,'edu','btc',10,2,'edubtc','innovation'),(147,'wtc','btc',8,2,'wtcbtc','innovation'),(148,'bifi','btc',8,4,'bifibtc','bifurcation'),(149,'bcx','btc',8,4,'bcxbtc','bifurcation'),(150,'bcd','btc',6,4,'bcdbtc','bifurcation'),(151,'sbtc','btc',6,4,'sbtcbtc','bifurcation'),(152,'btg','btc',6,4,'btgbtc','bifurcation'),(153,'xmr','eth',6,4,'xmreth','main'),(154,'eos','eth',8,2,'eoseth','main'),(155,'omg','eth',6,4,'omgeth','main'),(156,'iota','eth',6,4,'iotaeth','main'),(157,'ada','eth',6,4,'adaeth','main'),(158,'steem','eth',6,4,'steemeth','main'),(159,'poly','eth',6,4,'polyeth','innovation'),(160,'kan','eth',8,2,'kaneth','innovation'),(161,'lba','eth',6,4,'lbaeth','innovation'),(162,'wan','eth',6,4,'waneth','innovation'),(163,'bft','eth',8,4,'bfteth','innovation'),(164,'zrx','eth',8,2,'zrxeth','innovation'),(165,'ast','eth',8,2,'asteth','innovation'),(166,'knc','eth',8,2,'knceth','innovation'),(167,'ont','eth',8,4,'onteth','innovation'),(168,'ht','eth',8,2,'hteth','innovation'),(169,'btm','eth',8,2,'btmeth','innovation'),(170,'iost','eth',8,2,'iosteth','innovation'),(171,'smt','eth',8,0,'smteth','innovation'),(172,'ela','eth',8,2,'elaeth','innovation'),(173,'trx','eth',8,2,'trxeth','innovation'),(174,'abt','eth',8,2,'abteth','innovation'),(175,'nas','eth',6,4,'naseth','innovation'),(176,'ocn','eth',8,2,'ocneth','innovation'),(177,'wicc','eth',8,2,'wicceth','innovation'),(178,'zil','eth',8,2,'zileth','innovation'),(179,'ctxc','eth',8,2,'ctxceth','innovation'),(180,'zla','eth',8,2,'zlaeth','innovation'),(181,'wpr','eth',8,2,'wpreth','innovation'),(182,'dta','eth',8,2,'dtaeth','innovation'),(183,'mtx','eth',8,2,'mtxeth','innovation'),(184,'theta','eth',8,2,'thetaeth','innovation'),(185,'srn','eth',8,2,'srneth','innovation'),(186,'ven','eth',8,2,'veneth','innovation'),(187,'bts','eth',8,2,'btseth','innovation'),(188,'wax','eth',6,4,'waxeth','innovation'),(189,'hsr','eth',6,4,'hsreth','innovation'),(190,'icx','eth',6,4,'icxeth','innovation'),(191,'mtn','eth',8,2,'mtneth','innovation'),(192,'act','eth',8,2,'acteth','innovation'),(193,'blz','eth',8,2,'blzeth','innovation'),(194,'qash','eth',6,4,'qasheth','innovation'),(195,'ruff','eth',8,2,'ruffeth','innovation'),(196,'cmt','eth',8,2,'cmteth','innovation'),(197,'elf','eth',8,0,'elfeth','innovation'),(198,'meet','eth',8,2,'meeteth','innovation'),(199,'soc','eth',8,2,'soceth','innovation'),(200,'qtum','eth',6,4,'qtumeth','innovation'),(201,'itc','eth',8,0,'itceth','innovation'),(202,'swftc','eth',8,2,'swftceth','innovation'),(203,'yee','eth',8,2,'yeeeth','innovation'),(204,'lsk','eth',6,4,'lsketh','innovation'),(205,'lun','eth',6,4,'luneth','innovation'),(206,'let','eth',8,2,'leteth','innovation'),(207,'gnx','eth',8,0,'gnxeth','innovation'),(208,'chat','eth',8,2,'chateth','innovation'),(209,'eko','eth',8,2,'ekoeth','innovation'),(210,'topc','eth',8,2,'topceth','innovation'),(211,'dgd','eth',6,4,'dgdeth','innovation'),(212,'stk','eth',8,2,'stketh','innovation'),(213,'mds','eth',8,0,'mdseth','innovation'),(214,'dbc','eth',8,2,'dbceth','innovation'),(215,'snc','eth',8,2,'snceth','innovation'),(216,'pay','eth',8,2,'payeth','innovation'),(217,'qun','eth',8,2,'quneth','innovation'),(218,'aidoc','eth',8,2,'aidoceth','innovation'),(219,'tnb','eth',8,0,'tnbeth','innovation'),(220,'appc','eth',6,4,'appceth','innovation'),(221,'rdn','eth',8,0,'rdneth','innovation'),(222,'utk','eth',8,2,'utketh','innovation'),(223,'powr','eth',8,0,'powreth','innovation'),(224,'bat','eth',8,0,'bateth','innovation'),(225,'propy','eth',8,2,'propyeth','innovation'),(226,'mana','eth',8,0,'manaeth','innovation'),(227,'req','eth',8,1,'reqeth','innovation'),(228,'cvc','eth',8,0,'cvceth','innovation'),(229,'qsp','eth',8,0,'qspeth','innovation'),(230,'evx','eth',8,2,'evxeth','innovation'),(231,'dat','eth',8,2,'dateth','innovation'),(232,'mco','eth',6,4,'mcoeth','innovation'),(233,'gnt','eth',8,2,'gnteth','innovation'),(234,'gas','eth',6,4,'gaseth','innovation'),(235,'ost','eth',8,2,'osteth','innovation'),(236,'link','eth',8,2,'linketh','innovation'),(237,'rcn','eth',8,0,'rcneth','innovation'),(238,'tnt','eth',8,0,'tnteth','innovation'),(239,'eng','eth',6,4,'engeth','innovation'),(240,'salt','eth',6,4,'salteth','innovation'),(241,'adx','eth',8,2,'adxeth','innovation'),(242,'edu','eth',10,2,'edueth','innovation'),(243,'wtc','eth',6,4,'wtceth','innovation'),(244,'xrp','ht',6,4,'xrpht','main'),(245,'iost','ht',8,4,'iostht','innovation'),(246,'dash','ht',6,4,'dashht','main'),(247,'wicc','usdt',4,4,'wiccusdt','innovation'),(248,'eos','ht',6,4,'eosht','main'),(249,'bch','ht',6,4,'bchht','main'),(250,'ltc','ht',6,4,'ltcht','main'),(251,'etc','ht',6,4,'etcht','main'),(252,'waves','btc',6,4,'wavesbtc','innovation'),(253,'waves','eth',6,4,'waveseth','innovation'),(254,'hb10','usdt',4,4,'hb10usdt','main'),(255,'cmt','usdt',4,4,'cmtusdt','innovation'),(256,'dcr','btc',6,4,'dcrbtc','innovation'),(257,'dcr','eth',6,4,'dcreth','innovation'),(258,'pai','btc',8,2,'paibtc','innovation'),(259,'pai','eth',6,4,'paieth','innovation');
 /*!40000 ALTER TABLE `xcm_huobi_symbol` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `xcm_okex_symbol`
+--
+
+DROP TABLE IF EXISTS `xcm_okex_symbol`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `xcm_okex_symbol` (
+  `_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL COMMENT '编号',
+  `symbol` varchar(20) NOT NULL COMMENT '交易对',
+  `base_min_size` double NOT NULL COMMENT '最小交易量',
+  `base_increment` double NOT NULL COMMENT '交易货币精度',
+  `quote_increment` double NOT NULL COMMENT '计价货币精度',
+  `base_currency` varchar(20) NOT NULL COMMENT '交易币种',
+  `quote_currency` varchar(20) NOT NULL COMMENT '计价币种',
+  PRIMARY KEY (`_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=570 DEFAULT CHARSET=utf8 COMMENT='OKEx交易对表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `xcm_okex_symbol`
@@ -54,4 +111,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-06  7:25:23
+-- Dump completed on 2018-08-06  7:32:49
