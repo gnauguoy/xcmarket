@@ -27,7 +27,7 @@ urlpatterns = [
     # url(r'^get_increase_list/(\d+)/(\d+)/$', get_increase_list),
     # url(r'^get_descrease_list/(\d+)/(\d+)/$', get_descrease_list),
     # url(r'^get_turn_volume_list/(\d+)/(\d+)/$', get_turn_volume_list),
-    url(r'^get_currency_list/([a-z_]+)/(desc|asc)/(\d+)/(\d+)/$', get_currency_list),
+    url(r'^get_currency_list/([a-zA-Z_]+)/(desc|asc)/(\d+)/(\d+)/$', get_currency_list),
     path('get_hot_currency', get_hot_currency),
-    url(r'^search_currency/([a-z_\u4E00-\u9FA5A]+)/(\d+)/(\d+)/$', search_currency),
+    url(r'^search_currency/([a-zA-Z_\u4E00-\u9FA5A]+)/(\d+)/(\d+)/$', search_currency),
 ]

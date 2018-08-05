@@ -145,4 +145,3 @@ class OKExWebSocket:
 def get_kline(period):
     okexWs = OKExWebSocket()
     okexWs.init(period)
-
