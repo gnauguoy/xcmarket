@@ -1,0 +1,11 @@
+EXCEPTION 
+    EX_TYPE  : <class 'OSError'> 
+    EX_VAL   : [Errno 22] Invalid argument 
+    EX_TRACK : 
+        <FrameSummary file get-huobi-kline.py, line 150 in get_kline> 
+        <FrameSummary file /usr/local/lib/python3.7/site-packages/websocket/_app.py, line 151 in send> 
+        <FrameSummary file /usr/local/lib/python3.7/site-packages/websocket/_core.py, line 240 in send> 
+        <FrameSummary file /usr/local/lib/python3.7/site-packages/websocket/_core.py, line 265 in send_frame> 
+        <FrameSummary file /usr/local/lib/python3.7/site-packages/websocket/_core.py, line 430 in _send> 
+        <FrameSummary file /usr/local/lib/python3.7/site-packages/websocket/_socket.py, line 117 in send> 
+        <FrameSummary file /usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/lib/python3.7/ssl.py, line 981 in send> 
