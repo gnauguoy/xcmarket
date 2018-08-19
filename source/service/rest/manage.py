@@ -13,3 +13,5 @@ if __name__ == "__main__":
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
+
+# 只有换行符有差异，导致不能正常同步此文件，尝试添加一些注释来帮助提交它。
