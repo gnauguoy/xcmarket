@@ -1,4 +1,4 @@
-# version 2018-08-05 05:11
+# version 2018-08-18 06:04
 import gzip
 import io
 import json
@@ -6,6 +6,8 @@ import time
 import sys
 import traceback
 import os
+import platform
+from chengutil import mysqlutil
 
 
 # 解压缩
@@ -42,41 +44,52 @@ def convertKlineJsonByTick(tick, chanel):
 
 # 将日期字符串转换为时间戳
 # 示例：dateStr = '2018-1-1 00:00:00'
-def getTimeStamp(dateStr):
-    # 转为时间数组
-    timeArray = time.strptime(dateStr, "%Y-%m-%d %H:%M:%S")
-    # 转为时间戳
-    timeStamp = int(time.mktime(timeArray))
-    return timeStamp
+def getTimeStamp(dateStr, format="%Y-%m-%d %H:%M:%S"):
 
-def getTimeStampReturn13(dateStr):
-    timeStamp = getTimeStamp(dateStr)
+    try:
+        # 转为时间数组
+        timeArray = time.strptime(dateStr, format)
+        # 转为时间戳
+        timeStamp = int(time.mktime(timeArray))
+        return timeStamp
+    except:
+        printExcept(target='util > getTimeStamp', msg="dateStr: " + dateStr)
+        # ex_type, ex_val, ex_stack = sys.exc_info()
+        # raise Exception("Exception in util > getTimeStamp dateStr: " + dateStr + "\n EX_VAL: " + str(ex_val))
+        return False
+
+
+def getTimeStampReturn13(dateStr, format="%Y-%m-%d %H:%M:%S"):
+    timeStamp = getTimeStamp(dateStr, format)
     return timeStamp * 1000
 
 
 # 将时间戳转换为日期字符串
 def getLocaleDateStr(timestamp):
-    return time.strftime('%Y-%m-%d %H:%M:%S %w-%Z', time.localtime(timestamp/1000))
+    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp/1000))
 
 
 def getLocaleDateStrBy16(timestamp):
-    return time.strftime('%Y-%m-%d %H:%M:%S %w-%Z', time.localtime(timestamp/1000000))
+    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp/1000000))
 
 
 def getLocaleDateStrBy13(timestamp):
-    return time.strftime('%Y-%m-%d %H:%M:%S %w-%Z', time.localtime(timestamp/1000))
+    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp/1000))
 
 
 def getLocaleDateStrBy10(timestamp):
-    return time.strftime('%Y-%m-%d %H:%M:%S %w-%Z', time.localtime(timestamp))
+    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp))
 
 
 def getLocaleDateStrDefault(timestamp, sep=' '):
-    return time.strftime('%Y-%m-%d'+sep+'%H:%M:%S'+sep+'%w-%Z', time.localtime(timestamp))
+    return time.strftime('%Y-%m-%d'+sep+'%H:%M:%S', time.localtime(timestamp))
 
 
 # 打印抛出错误信息，并记录日志。
-def printExcept(filename='', logdir='/tmp/exlog/'):
+def printExcept(filename='', logdir='/tmp/xcmarket_log/', target='', msg=''):
+
+    if logdir == '/tmp/exlog/' and platform.system() == 'Windows':
+        logdir = 'C:\\Windows\\Temp\\xcmarket_log\\'
 
     if filename == '':
         filename = os.path.basename(sys.argv[0]).split(".")[0]
@@ -95,16 +108,22 @@ def printExcept(filename='', logdir='/tmp/exlog/'):
         prefix += filename + '_'
     logToFile(log, prefix, logdir)
 
-    print('\033[0;30;41m', log, '\033[0m')
+    mysqlutil.logToExcept(log, target, msg)
 
 
 # 将日志信息记录在文件中
-def logToFile(logStr, prefix='log_', dir='/tmp/exlog/'):
+def logToFile(logStr, prefix='log_', dir='/tmp/xcmarket_log/'):
+
+    if dir == '/tmp/exlog/' and platform.system() == 'Windows':
+        dir = 'C:\\Windows\\Temp\\xcmarket_log\\'
 
     if os.path.exists(dir) == False:
         os.makedirs(dir)
 
-    f = open(dir + prefix + getLocaleDateStrDefault(time.time(), '_'), 'w')
+    fileName = getLocaleDateStrDefault(time.time(), '_')
+    fileName = fileName.replace(':', '')
+    fileName = dir + prefix + fileName
+    f = open(fileName, 'w')
     f.write(logStr)
     f.close()
 
@@ -121,7 +140,7 @@ def daemonize(func):
     # 子进程的pid一定为0，父进程大于0
     if pid:
         # 退出父进程，sys.exit()方法比os._exit()方法会多执行一些刷新缓冲工作
-        # print('fork pid >>>',pid)
+        # mysqlutil.log('binance', 'fork pid >>>',pid)
         pidStr = 'RUN_' + getCurrentFilename() + '_pid_' + str(pid)
         logToFile(pidStr, pidStr + '_')
         sys.exit(0)
@@ -155,3 +174,53 @@ def daemonize(func):
 
     # 执行被守护的函数
     func()
+
+
+# 休眠并打印休眠时间
+def sleep(sec, show = True):
+    if sec < 1:
+        return
+    count = 0
+    while count < sec:
+        count += 1
+        if show:
+            print('sleep >>>', count)
+        time.sleep(1)
+
+
+def timeElapsed(startTimestamp):
+    sSpan = time.time() - startTimestamp
+    span = str(int(round(sSpan, 0))) + 's'
+
+    # 将耗时时长格式化为分钟数
+    mSpan = sSpan / 60
+    if mSpan < 1:
+        return span
+
+    span = str(int(round(mSpan, 0))) + 'm'
+
+    # 将耗时时长格式化为小时数
+    hSpan = mSpan / 60
+    if hSpan < 1:
+        return span
+
+    span = str(int(round(hSpan, 0))) + 'h'
+
+    # 将耗时时长格式化为天数
+    dSpan = hSpan / 24
+    if dSpan < 1:
+        return span
+
+    span = str(int(round(dSpan, 0))) + 'd'
+
+    return span
+
+
+def dprint(*param):
+    msg = ''
+    for m in param:
+        msg += str(m) + ' '
+    msg = bytes("\r" + msg, encoding="utf8")
+    os.write(1, msg)
+    sys.stdout.flush()
+

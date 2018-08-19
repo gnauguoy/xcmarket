@@ -1,3 +1,0 @@
-import util
-
-util.printExcept()
