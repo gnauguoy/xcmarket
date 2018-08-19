@@ -21,27 +21,6 @@ def gzip_uncompress(c_data):
     return r_data
 
 
-# 将 kline 数据调整成数据库表需要的格式
-def convertKlineJson(klineStr):
-    klineObj = json.loads(klineStr)
-    tick = klineObj['tick']
-    ch = klineObj['ch'].split('.')
-    symbol = ch[1]
-    period = ch[3]
-    tick['symbol'] = symbol
-    tick['period'] = period
-    return klineObj
-
-
-def convertKlineJsonByTick(tick, chanel):
-    chanel = chanel.split('.')
-    symbol = chanel[1]
-    period = chanel[3]
-    tick['symbol'] = symbol
-    tick['period'] = period
-    return tick
-
-
 # 将日期字符串转换为时间戳
 # 示例：dateStr = '2018-1-1 00:00:00'
 def getTimeStamp(dateStr, format="%Y-%m-%d %H:%M:%S"):

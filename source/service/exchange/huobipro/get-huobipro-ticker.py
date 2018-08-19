@@ -1,6 +1,6 @@
 import re
 import pymysql
-from chengutil import mysqlutil, util, hitbtc as chitbtc
+from chengutil import mysqlutil, util, CommonApi
 import time, datetime
 
 startDate = datetime.datetime.now()
@@ -10,7 +10,7 @@ primaries = []
 dupCount = 0
 timeErrCount = 0
 
-TABLE = 'hitbtc'
+TABLE = 'huobipro'
 
 
 def save_ticker():
@@ -25,46 +25,38 @@ def save_ticker():
 
         nowTime = time.time() * 10000000
 
-        symbols = chitbtc.get_symbols('dict')
-        tickers = chitbtc.get_ticker()
+        symbols = CommonApi.get_symbols(TABLE, 'dict')
+        tickers = CommonApi.get_ticker('https://api.huobi.pro/market/tickers')
 
-        # 访问太过频繁，超过了每 1 秒钟 100 次的限制，先暂停休眠 1 秒钟。
-        if 'error' in tickers and tickers['error']['code'] == 429:
-            time.sleep(1)
-        if 'error' in tickers:
+        if tickers['status'] == 'error':
             # 打印请求返回的错误信息
             mysqlutil.log(TABLE, startDate, 'save_ticker error >>>', tickers)
             exCount += 1
 
-        sql = '''
-            INSERT INTO xcm_hitbtc_ticker (
+        sql = 'INSERT INTO xcm_' + TABLE + '_ticker ('
+        sql += '''
                 _id, symbol, base, quote, 
-                ask, bid, open, high, low, last, 
-                volume, volumeQuote, ts)
+                open, high, low, close, amount, vol, count, ts)
             VALUES (
                 %s, %s, %s, %s, 
-                %s, %s, %s, %s, %s, %s,
-                %s, %s, %s)
+                %s, %s, %s, %s, %s, %s, %s, %s)
             '''
 
         tickerCount = 0
         dupCurCount = 0
 
+        ts = tickers['ts']
+        tickers = tickers['data']
+
         for t in tickers:
             symbol = t['symbol']
+
+            # 去除非正常的交易对 huobi10/hb10
+            if symbol == 'huobi10' or symbol == 'hb10':
+                continue
+
             base = symbols[symbol]['base']
             quote = symbols[symbol]['quote']
-
-            # 转换时间为时间戳
-            ts = util.getTimeStampReturn13(t['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
-            if ts == False:
-                timeErrCount += 1
-                util.printExcept(target='get-' + TABLE + '-kline > get_last_timestamp', msg=str(t))
-                continue
-            regex = r'.+?\.([0-9]{3})Z';
-            matchObj = re.search(regex, t['timestamp'], re.I);
-            ms = matchObj.group(1)
-            ts += int(ms)
 
             primary = symbol + '-' + str(ts) + '-' + base + '-' + quote + '-'
             if primary in primaries:
@@ -75,21 +67,19 @@ def save_ticker():
             primaries.append(primary)
 
             param = (nowTime, symbol, base, quote,
-                     t['ask'], t['bid'], t['open'], t['high'], t['low'], t['last'],
-                     t['volume'], t['volumeQuote'], ts)
+                     t['open'], t['high'], t['low'], t['close'], t['amount'], t['vol'], t['count'], ts)
             try:
                 cursor.execute(sql, param)
                 db.commit()
             except pymysql.err.IntegrityError:
-                # ex_type, ex_val, ex_stack = sys.exc_info()
-                # print('EX_VAL: ' + str(ex_val))
                 dupCount += 1
                 dupCurCount += 1
                 exCount += 1
                 continue
 
             tickerCount += 1
-            util.dprint(startDate, symbol, 'tickerCount:', tickerCount, '/ len:', len(tickers), '/ dupCurCount:', dupCurCount, '/ dupCount:', dupCount)
+            util.dprint(startDate, symbol, 'tickerCount:', tickerCount, '/ len:', len(tickers), '/ dupCurCount:',
+                        dupCurCount, '/ dupCount:', dupCount)
 
         util.dprint(startDate, datetime.datetime.now(), 'completed',
                     '\nnewCount:', tickerCount, ' duplicateCurrentCount:', dupCurCount, ' exCount:', exCount,
@@ -112,5 +102,5 @@ def save_ticker():
 if __name__ == '__main__':
 
     while True:
-        save_ticker()
         runCount += 1
+        save_ticker()
