@@ -1,4 +1,5 @@
-import json, sys
+# version 2018-08-19 17:53
+import json
 import socket
 from urllib import request
 
@@ -38,9 +39,12 @@ def get_huobipro_symbol():
 def import_huobipro_symbol():
     symbol = get_huobipro_symbol()
     symbol = symbol['data']
-    print(len(symbol))
+    print('symbol len >>>', len(symbol))
 
     try:
+
+        count = 0
+
         for s in symbol:
             sql = '''
                 SELECT COUNT(_id) FROM `xcm_huobipro_symbol` WHERE symbol=%s'''
@@ -58,7 +62,10 @@ def import_huobipro_symbol():
                 s['base-currency'], s['quote-currency'], s['price-precision'],
                 s['amount-precision'], s['symbol'], s['symbol-partition']))
 
-        db.commit()
+            db.commit()
+            count += 1
+
+        print('insert >>>', count)
         print('### Successed ###')
     except:
         util.printExcept(target='import-huobipro-symbol > import_huobipro_symbol')

@@ -1,4 +1,4 @@
-# version 2018-08-19 10:28
+# version 2018-08-19 17:53
 import pymysql, json, time
 from chengutil import util
 import sys
@@ -6,11 +6,17 @@ import datetime
 
 
 def init():
+    # return pymysql.connect(
+    #     host="localhost",
+    #     port=8889,
+    #     user="root",
+    #     passwd="root",
+    #     db="xcmarket")
     return pymysql.connect(
         host="localhost",
-        port=8889,
+        port=3306,
         user="root",
-        passwd="root",
+        passwd="d20180731mysql",
         db="xcmarket")
 
 

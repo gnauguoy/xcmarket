@@ -1,4 +1,4 @@
-import re
+# version 2018-08-19 17:53
 import pymysql
 from chengutil import mysqlutil, util, CommonApi
 import time, datetime
